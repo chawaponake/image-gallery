@@ -108,13 +108,17 @@
             },
             handleUpload : function (files){
                 let formData = new FormData();
+                const config = { onUploadProgress: progressEvent => {
+                        console.log(progressEvent.loaded / progressEvent.total * 100);
+                    }
+                };
 
                 Array.from(files).forEach(function(file){
                     formData.append('files[]', file);
 
                 });
 
-                axios.post('media-upload', formData)
+                axios.post('media-upload', formData, config)
                     .then(response => {
                         this.$refs.files = "";
                         this.medias = this.medias.concat(response.data.data);
@@ -191,7 +195,7 @@
     }
 
     .img-thumb:hover .overlay,
-    .img-thumb-error .overlay{
+    .img-thumb-error:hover .overlay{
         display: block;
         background: #1d2124;
         opacity: 0.5;

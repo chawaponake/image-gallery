@@ -47919,12 +47919,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             var formData = new FormData();
+            var config = { onUploadProgress: function onUploadProgress(progressEvent) {
+                    console.log(progressEvent.loaded / progressEvent.total * 100);
+                }
+            };
 
             Array.from(files).forEach(function (file) {
                 formData.append('files[]', file);
             });
 
-            axios.post('media-upload', formData).then(function (response) {
+            axios.post('media-upload', formData, config).then(function (response) {
                 _this.$refs.files = "";
                 _this.medias = _this.medias.concat(response.data.data);
             });
@@ -48190,7 +48194,7 @@ exports = module.exports = __webpack_require__(45)(false);
 
 
 // module
-exports.push([module.i, "\n.upload[data-v-72ff0d15] {\n  margin-left: 15px;\n  margin-right: 15px;\n  padding: 50px 45px;\n  width: 100%;\n  border: 2px dashed #cecece;\n}\n.upload[data-v-72ff0d15]:hover {\n  cursor: pointer;\n}\n.upload-dragover[data-v-72ff0d15] {\n  border: 2px dashed #4e555b;\n}\n.gallery[data-v-72ff0d15] {\n  padding-top: 20px;\n}\n.wrapper[data-v-72ff0d15] {\n  display: none;\n}\n.img-thumb[data-v-72ff0d15] {\n  width: 200px;\n  height: 200px;\n}\n.img-thumb img[data-v-72ff0d15] {\n    width: 100%;\n    height: auto;\n}\n.img-thumb-error[data-v-72ff0d15] {\n  width: 200px;\n  height: 200px;\n}\n.overlay[data-v-72ff0d15] {\n  position: absolute;\n  width: 200px;\n  height: 200px;\n  padding: 10px 10px;\n}\n.img-thumb:hover .overlay[data-v-72ff0d15],\n.img-thumb-error .overlay[data-v-72ff0d15] {\n  display: block;\n  background: #1d2124;\n  opacity: 0.5;\n}\n.img-thumb-button[data-v-72ff0d15] {\n  opacity: 0;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n  text-align: center;\n}\n.img-thumb:hover .img-thumb-button[data-v-72ff0d15],\n.img-thumb-error:hover .img-thumb-button[data-v-72ff0d15] {\n  opacity: 1;\n}\n.modal-dialog[data-v-72ff0d15] {\n  margin: auto;\n  display: block;\n  width: 80%;\n  max-width: 700px;\n  padding: 70px 0;\n}\n.close[data-v-72ff0d15] {\n  position: absolute;\n  top: 80%;\n  right: 100px;\n  color: #f1f1f1;\n  font-size: 70px;\n  font-weight: bold;\n  -webkit-transition: 0.3s;\n  transition: 0.3s;\n}\n.close[data-v-72ff0d15]:hover,\n.close[data-v-72ff0d15]:focus {\n  color: #bbb;\n  text-decoration: none;\n  cursor: pointer;\n}\n", ""]);
+exports.push([module.i, "\n.upload[data-v-72ff0d15] {\n  margin-left: 15px;\n  margin-right: 15px;\n  padding: 50px 45px;\n  width: 100%;\n  border: 2px dashed #cecece;\n}\n.upload[data-v-72ff0d15]:hover {\n  cursor: pointer;\n}\n.upload-dragover[data-v-72ff0d15] {\n  border: 2px dashed #4e555b;\n}\n.gallery[data-v-72ff0d15] {\n  padding-top: 20px;\n}\n.wrapper[data-v-72ff0d15] {\n  display: none;\n}\n.img-thumb[data-v-72ff0d15] {\n  width: 200px;\n  height: 200px;\n}\n.img-thumb img[data-v-72ff0d15] {\n    width: 100%;\n    height: auto;\n}\n.img-thumb-error[data-v-72ff0d15] {\n  width: 200px;\n  height: 200px;\n}\n.overlay[data-v-72ff0d15] {\n  position: absolute;\n  width: 200px;\n  height: 200px;\n  padding: 10px 10px;\n}\n.img-thumb:hover .overlay[data-v-72ff0d15],\n.img-thumb-error:hover .overlay[data-v-72ff0d15] {\n  display: block;\n  background: #1d2124;\n  opacity: 0.5;\n}\n.img-thumb-button[data-v-72ff0d15] {\n  opacity: 0;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n  text-align: center;\n}\n.img-thumb:hover .img-thumb-button[data-v-72ff0d15],\n.img-thumb-error:hover .img-thumb-button[data-v-72ff0d15] {\n  opacity: 1;\n}\n.modal-dialog[data-v-72ff0d15] {\n  margin: auto;\n  display: block;\n  width: 80%;\n  max-width: 700px;\n  padding: 70px 0;\n}\n.close[data-v-72ff0d15] {\n  position: absolute;\n  top: 80%;\n  right: 100px;\n  color: #f1f1f1;\n  font-size: 70px;\n  font-weight: bold;\n  -webkit-transition: 0.3s;\n  transition: 0.3s;\n}\n.close[data-v-72ff0d15]:hover,\n.close[data-v-72ff0d15]:focus {\n  color: #bbb;\n  text-decoration: none;\n  cursor: pointer;\n}\n", ""]);
 
 // exports
 
