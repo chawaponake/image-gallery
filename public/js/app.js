@@ -48397,9 +48397,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             axios.get('home').then(function (response) {
-                _this.total_sizes_b = response.data.overview[0].total_sizes.toLocaleString();
-                _this.total_sizes_mb = (response.data.overview[0].total_sizes / 1024 / 1024).toLocaleString('en-US', { maximumFractionDigits: 2 });
-                _this.no_of_files = response.data.overview[0].total_files.toLocaleString();
+                _this.total_sizes_b = Number(response.data.overview[0].total_sizes).toLocaleString();
+                _this.total_sizes_mb = Number(response.data.overview[0].total_sizes / 1024 / 1024).toLocaleString('en-US', { maximumFractionDigits: 2 });
+                _this.no_of_files = Number(response.data.overview[0].total_files).toLocaleString();
                 _this.composition = response.data.composition;
             });
         }
@@ -48480,16 +48480,16 @@ var render = function() {
                             _vm._v(
                               " " +
                                 _vm._s(
-                                  (
-                                    data.total_sizes /
-                                    1024 /
-                                    1024
+                                  Number(
+                                    data.total_sizes / 1024 / 1024
                                   ).toLocaleString(undefined, {
                                     maximumFractionDigits: 2
                                   })
                                 ) +
                                 "MB (" +
-                                _vm._s(data.total_sizes.toLocaleString()) +
+                                _vm._s(
+                                  Number(data.total_sizes).toLocaleString()
+                                ) +
                                 "B) "
                             )
                           ])
