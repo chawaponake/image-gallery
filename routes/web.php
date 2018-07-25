@@ -21,3 +21,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('media-upload' ,'MediasController')
         ->only(['index','store','destroy']);
+
+Route::get('/gallery', 'MediasController@index')->name('gallery');

@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-    <upload-component></upload-component>
+    <diskusage-component></diskusage-component>
 @endsection

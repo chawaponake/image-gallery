@@ -23,25 +23,30 @@ class MediasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $medias = Medias::all();
-        $data = [];
+        if($request->ajax()){
+            $medias = Medias::all();
+            $data = [];
 
-        foreach ($medias as $media){
-            array_push($data,[
-                'id' => $media->id,
-                'name' => $media->name,
-                'media' => asset(Storage::disk('local')->url($media->media)),
-                'isImage' => $media->mime_type == 'image/jpeg' || $media->mime_type == 'image/png' ? true  : false,
-                'isOverMaxSize' => $media->size > 10485760 ? true : false
+            foreach ($medias as $media){
+                array_push($data,[
+                    'id' => $media->id,
+                    'name' => $media->name,
+                    'media' => asset(Storage::disk('local')->url($media->media)),
+                    'isImage' => $media->mime_type == 'image/jpeg' || $media->mime_type == 'image/png' ? true  : false,
+                    'isOverMaxSize' => $media->size > 10485760 ? true : false
+                ]);
+            }
+
+            return response()->json([
+                'msg' => 'Successfully',
+                'data' => $data
             ]);
+        }else{
+            return view('gallery');
         }
 
-        return response()->json([
-            'msg' => 'Successfully',
-            'data' => $data
-        ]);
     }
 
     /**

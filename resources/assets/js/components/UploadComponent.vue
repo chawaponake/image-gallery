@@ -122,7 +122,7 @@
 
             },
             fetchData : function(){
-                axios.get('media-upload')
+                axios.get('gallery')
                     .then(response => {
                         this.medias = response.data.data;
                     });

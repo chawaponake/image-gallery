@@ -17,6 +17,7 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('upload-component', require('./components/UploadComponent'));
+Vue.component('diskusage-component', require('./components/DiskUsageComponent.vue'));
 
 const app = new Vue({
     el: '#app'
