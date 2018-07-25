@@ -46,7 +46,7 @@
                                 <tr v-for="data in composition">
                                     <td> {{data.mime_type}} </td>
                                     <td> {{data.total_files}} </td>
-                                    <td> {{((data.total_sizes/1024)/1024).toLocaleString(undefined, {maximumFractionDigits:2})}}MB ({{data.total_sizes.toLocaleString()}}B) </td>
+                                    <td> {{Number((data.total_sizes/1024)/1024).toLocaleString(undefined, {maximumFractionDigits:2})}}MB ({{Number(data.total_sizes).toLocaleString()}}B) </td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -77,9 +77,9 @@
             fetch : function (){
                 axios.get('home')
                     .then(response => {
-                        this.total_sizes_b = (response.data.overview[0].total_sizes).toLocaleString();
-                        this.total_sizes_mb = ((response.data.overview[0].total_sizes / 1024) / 1024).toLocaleString('en-US', {maximumFractionDigits:2});
-                        this.no_of_files = (response.data.overview[0].total_files).toLocaleString();
+                        this.total_sizes_b = Number(response.data.overview[0].total_sizes).toLocaleString();
+                        this.total_sizes_mb = Number((response.data.overview[0].total_sizes / 1024) / 1024).toLocaleString('en-US', {maximumFractionDigits:2});
+                        this.no_of_files = Number(response.data.overview[0].total_files).toLocaleString();
                         this.composition = response.data.composition;
                     });
             }
