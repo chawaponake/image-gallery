@@ -70,29 +70,30 @@ class MediasController extends Controller
         $data = [];
         $msg = 'Fails';
         if($request->hasFile('files')){
-            foreach ($request->file('files') as $file){
-                $name = $file->getClientOriginalName();
-                $media = $file->store('public/images');
-                $mime_type = $file->getClientMimeType();
-                $size = $file->getClientSize();
+//            foreach ($request->file('files') as $file){
+            $file = $request->file('files')[0];
+            $name = $file->getClientOriginalName();
+            $media = $file->store('public/images');
+            $mime_type = $file->getClientMimeType();
+            $size = $file->getClientSize();
 
-                $media = Medias::create([
-                    'name' => $name,
-                    'media' => $media,
-                    'mime_type' => $mime_type,
-                    'size' => $size
-                ]);
+            $media = Medias::create([
+                'name' => $name,
+                'media' => $media,
+                'mime_type' => $mime_type,
+                'size' => $size
+            ]);
 
-                array_push($data,[
-                    'id' => $media->id,
-                    'name' => $media->name,
-                    'media' => asset(Storage::disk('local')->url($media->media)),
-                    'isImage' => $mime_type == 'image/jpeg' || $mime_type == 'image/png' ? true  : false,
-                    'isOverMaxSize' => $size > 10485760 ? true : false
-                ]);
+            array_push($data,[
+                'id' => $media->id,
+                'name' => $media->name,
+                'media' => asset(Storage::disk('local')->url($media->media)),
+                'isImage' => $mime_type == 'image/jpeg' || $mime_type == 'image/png' ? true  : false,
+                'isOverMaxSize' => $size > 10485760 ? true : false
+            ]);
 
 
-            }
+//            }
             $msg = 'Successfully';
         }
 

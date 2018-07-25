@@ -47916,8 +47916,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.handleUpload(files);
         },
         handleUpload: function handleUpload(files) {
-            var _this = this;
-
             var formData = new FormData();
             var config = { onUploadProgress: function onUploadProgress(progressEvent) {
                     console.log(progressEvent.loaded / progressEvent.total * 100);
@@ -47925,13 +47923,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             };
 
             Array.from(files).forEach(function (file) {
-                formData.append('files[]', file);
-            });
+                var _this = this;
 
-            axios.post('media-upload', formData, config).then(function (response) {
-                _this.$refs.files = "";
-                _this.medias = _this.medias.concat(response.data.data);
-            });
+                formData.set('files[]', file);
+                axios.post('media-upload', formData, config).then(function (response) {
+                    _this.medias = _this.medias.concat(response.data.data);
+                });
+            }.bind(this));
+            this.$refs.files = "";
         },
         fetchData: function fetchData() {
             var _this2 = this;

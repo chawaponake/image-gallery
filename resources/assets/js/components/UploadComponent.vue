@@ -22,8 +22,8 @@
                             </div>
                         </div>
                         <div class="row align-content-center text-center gallery">
-                            <div class="col-md-4" v-for="media in medias">
 
+                            <div class="col-md-4" v-for="media in medias">
                                 <div class="img-thumb-error" v-if="!media.isImage">
                                     <div class="overlay"></div>
                                     <i class="fas fa-exclamation-triangle text-danger fa-7x pt-4"></i>
@@ -103,8 +103,8 @@
                 this.$refs.files.click();
             },
             onchange : function(e){
-              const files = e.target.files;
-              this.handleUpload(files);
+                const files = e.target.files;
+                this.handleUpload(files);
             },
             handleUpload : function (files){
                 let formData = new FormData();
@@ -114,15 +114,15 @@
                 };
 
                 Array.from(files).forEach(function(file){
-                    formData.append('files[]', file);
+                    formData.set('files[]', file);
+                    axios.post('media-upload', formData, config)
+                        .then(response => {
+                            this.medias = this.medias.concat(response.data.data);
+                        });
+                }.bind(this));
+                this.$refs.files = "";
 
-                });
 
-                axios.post('media-upload', formData, config)
-                    .then(response => {
-                        this.$refs.files = "";
-                        this.medias = this.medias.concat(response.data.data);
-                    });
 
             },
             fetchData : function(){
