@@ -35,7 +35,9 @@ class MediasController extends Controller
                     'name' => $media->name,
                     'media' => asset(Storage::disk('local')->url($media->media)),
                     'isImage' => $media->mime_type == 'image/jpeg' || $media->mime_type == 'image/png' ? true  : false,
-                    'isOverMaxSize' => $media->size > 10485760 ? true : false
+                    'isOverMaxSize' => $media->size > 10485760 ? true : false,
+                    'isUpload' => false,
+                    'progressPercentage' => 0
                 ]);
             }
 
@@ -84,13 +86,15 @@ class MediasController extends Controller
                 'size' => $size
             ]);
 
-            array_push($data,[
+            $data = [
                 'id' => $media->id,
                 'name' => $media->name,
                 'media' => asset(Storage::disk('local')->url($media->media)),
                 'isImage' => $mime_type == 'image/jpeg' || $mime_type == 'image/png' ? true  : false,
-                'isOverMaxSize' => $size > 10485760 ? true : false
-            ]);
+                'isOverMaxSize' => $size > 10485760 ? true : false,
+                'isUpload' => false,
+                'progressPercentage' => 100
+            ];
 
 
 //            }
@@ -99,7 +103,7 @@ class MediasController extends Controller
 
         return response()->json([
             'msg' => $msg,
-            'data' => $data
+            'data' => $data,
         ]);
     }
 

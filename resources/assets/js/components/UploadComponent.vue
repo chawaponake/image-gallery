@@ -22,7 +22,6 @@
                             </div>
                         </div>
                         <div class="row align-content-center text-center gallery">
-
                             <div class="col-md-4" v-for="media in medias">
                                 <div class="img-thumb-error" v-if="!media.isImage">
                                     <div class="overlay"></div>
@@ -47,7 +46,11 @@
                                     </div>
                                     <div class="img-thumb" v-else>
                                         <div class="overlay"></div>
-                                        <img :src="media.media">
+                                        <div v-bind:class="{'uploading' : media.isUpload}">
+                                            <img src="/image/loading.gif" v-if="media.isUpload"/>
+                                            {{media.progessPercentage}}
+                                        </div>
+                                        <img :src="media.media" v-if="!media.isUpload">
                                         <div class="img-thumb-button">
                                             <button type="button" class="btn btn-primary" @click="showPopup(media.media)">
                                                 <i class="fas fa-search"></i>
@@ -107,22 +110,39 @@
                 this.handleUpload(files);
             },
             handleUpload : function (files){
-                let formData = new FormData();
-                const config = { onUploadProgress: progressEvent => {
-                        console.log(progressEvent.loaded / progressEvent.total * 100);
-                    }
-                };
 
                 Array.from(files).forEach(function(file){
-                    formData.set('files[]', file);
-                    axios.post('media-upload', formData, config)
+                    let fileInfo = {
+                        'id' : '',
+                        'name' : file.name,
+                        'media' : '',
+                        'isImage' : file.type == 'image/jpeg' || file.type == 'image/png' ? true : false,
+                        'isOverMaxSize' : file.size > 10485760 ? true : false,
+                        'isUpload' : true,
+                        'progessPercentage' : 0,
+                    };
+
+                    this.medias.push(fileInfo);
+
+                    const formData = new FormData();
+                    formData.append('files[]', file);
+
+                    axios.post('media-upload', formData, { onUploadProgress: progressEvent => {
+                            fileInfo.progessPercentage = parseInt( Math.round( ( progressEvent.loaded / progressEvent.total * 100)));
+                        }
+                    })
                         .then(response => {
-                            this.medias = this.medias.concat(response.data.data);
+                            fileInfo.id = response.data.data.id;
+                            fileInfo.name = response.data.data.name;
+                            fileInfo.media = response.data.data.media;
+                            fileInfo.isImage = response.data.data.isImage;
+                            fileInfo.isOverMaxSize = response.data.data.isOverMaxSize;
+                            fileInfo.isUpload = response.data.data.isUpload;
+                            fileInfo.progessPercentage = response.data.data.progessPercentage;
                         });
                 }.bind(this));
+
                 this.$refs.files = "";
-
-
 
             },
             fetchData : function(){
@@ -239,4 +259,12 @@
         text-decoration: none;
         cursor: pointer;
     }
+
+    .uploading{
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        padding: 10px 10px;
+    }
+
 </style>

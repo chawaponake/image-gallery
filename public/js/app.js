@@ -47881,6 +47881,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -47917,27 +47920,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.handleUpload(files);
         },
         handleUpload: function handleUpload(files) {
-            var formData = new FormData();
-            var config = { onUploadProgress: function onUploadProgress(progressEvent) {
-                    console.log(progressEvent.loaded / progressEvent.total * 100);
-                }
-            };
 
             Array.from(files).forEach(function (file) {
-                var _this = this;
+                var fileInfo = {
+                    'id': '',
+                    'name': file.name,
+                    'media': '',
+                    'isImage': file.type == 'image/jpeg' || file.type == 'image/png' ? true : false,
+                    'isOverMaxSize': file.size > 10485760 ? true : false,
+                    'isUpload': true,
+                    'progessPercentage': 0
+                };
 
-                formData.set('files[]', file);
-                axios.post('media-upload', formData, config).then(function (response) {
-                    _this.medias = _this.medias.concat(response.data.data);
+                this.medias.push(fileInfo);
+
+                var formData = new FormData();
+                formData.append('files[]', file);
+
+                axios.post('media-upload', formData, { onUploadProgress: function onUploadProgress(progressEvent) {
+                        fileInfo.progessPercentage = parseInt(Math.round(progressEvent.loaded / progressEvent.total * 100));
+                    }
+                }).then(function (response) {
+                    fileInfo.id = response.data.data.id;
+                    fileInfo.name = response.data.data.name;
+                    fileInfo.media = response.data.data.media;
+                    fileInfo.isImage = response.data.data.isImage;
+                    fileInfo.isOverMaxSize = response.data.data.isOverMaxSize;
+                    fileInfo.isUpload = response.data.data.isUpload;
+                    fileInfo.progessPercentage = response.data.data.progessPercentage;
                 });
             }.bind(this));
+
             this.$refs.files = "";
         },
         fetchData: function fetchData() {
-            var _this2 = this;
+            var _this = this;
 
             axios.get('gallery').then(function (response) {
-                _this2.medias = response.data.data;
+                _this.medias = response.data.data;
             });
         },
         showPopup: function showPopup(url) {
@@ -47945,10 +47965,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $('#img-popup').attr('src', url);
         },
         deleteMedia: function deleteMedia(id) {
-            var _this3 = this;
+            var _this2 = this;
 
             axios.delete('media-upload/' + id).then(function (response) {
-                _this3.fetchData();
+                _this2.fetchData();
             });
         }
 
@@ -48090,7 +48110,26 @@ var render = function() {
                           : _c("div", { staticClass: "img-thumb" }, [
                               _c("div", { staticClass: "overlay" }),
                               _vm._v(" "),
-                              _c("img", { attrs: { src: media.media } }),
+                              _c(
+                                "div",
+                                { class: { uploading: media.isUpload } },
+                                [
+                                  media.isUpload
+                                    ? _c("img", {
+                                        attrs: { src: "/image/loading.gif" }
+                                      })
+                                    : _vm._e(),
+                                  _vm._v(
+                                    "\n                                        " +
+                                      _vm._s(media.progessPercentage) +
+                                      "\n                                    "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              !media.isUpload
+                                ? _c("img", { attrs: { src: media.media } })
+                                : _vm._e(),
                               _vm._v(" "),
                               _c("div", { staticClass: "img-thumb-button" }, [
                                 _c(
@@ -48194,7 +48233,7 @@ exports = module.exports = __webpack_require__(45)(false);
 
 
 // module
-exports.push([module.i, "\n.upload[data-v-72ff0d15] {\n  margin-left: 15px;\n  margin-right: 15px;\n  padding: 50px 45px;\n  width: 100%;\n  border: 2px dashed #cecece;\n}\n.upload[data-v-72ff0d15]:hover {\n  cursor: pointer;\n}\n.upload-dragover[data-v-72ff0d15] {\n  border: 2px dashed #4e555b;\n}\n.gallery[data-v-72ff0d15] {\n  padding-top: 20px;\n}\n.wrapper[data-v-72ff0d15] {\n  display: none;\n}\n.img-thumb[data-v-72ff0d15] {\n  width: 200px;\n  height: 200px;\n}\n.img-thumb img[data-v-72ff0d15] {\n    width: 100%;\n    height: auto;\n}\n.img-thumb-error[data-v-72ff0d15] {\n  width: 200px;\n  height: 200px;\n}\n.overlay[data-v-72ff0d15] {\n  position: absolute;\n  width: 200px;\n  height: 200px;\n  padding: 10px 10px;\n}\n.img-thumb:hover .overlay[data-v-72ff0d15],\n.img-thumb-error:hover .overlay[data-v-72ff0d15] {\n  display: block;\n  background: #1d2124;\n  opacity: 0.5;\n}\n.img-thumb-button[data-v-72ff0d15] {\n  opacity: 0;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n  text-align: center;\n}\n.img-thumb:hover .img-thumb-button[data-v-72ff0d15],\n.img-thumb-error:hover .img-thumb-button[data-v-72ff0d15] {\n  opacity: 1;\n}\n.modal-dialog[data-v-72ff0d15] {\n  margin: auto;\n  display: block;\n  width: 80%;\n  max-width: 700px;\n  padding: 70px 0;\n}\n.close[data-v-72ff0d15] {\n  position: absolute;\n  top: 80%;\n  right: 100px;\n  color: #f1f1f1;\n  font-size: 70px;\n  font-weight: bold;\n  -webkit-transition: 0.3s;\n  transition: 0.3s;\n}\n.close[data-v-72ff0d15]:hover,\n.close[data-v-72ff0d15]:focus {\n  color: #bbb;\n  text-decoration: none;\n  cursor: pointer;\n}\n", ""]);
+exports.push([module.i, "\n.upload[data-v-72ff0d15] {\n  margin-left: 15px;\n  margin-right: 15px;\n  padding: 50px 45px;\n  width: 100%;\n  border: 2px dashed #cecece;\n}\n.upload[data-v-72ff0d15]:hover {\n  cursor: pointer;\n}\n.upload-dragover[data-v-72ff0d15] {\n  border: 2px dashed #4e555b;\n}\n.gallery[data-v-72ff0d15] {\n  padding-top: 20px;\n}\n.wrapper[data-v-72ff0d15] {\n  display: none;\n}\n.img-thumb[data-v-72ff0d15] {\n  width: 200px;\n  height: 200px;\n}\n.img-thumb img[data-v-72ff0d15] {\n    width: 100%;\n    height: auto;\n}\n.img-thumb-error[data-v-72ff0d15] {\n  width: 200px;\n  height: 200px;\n}\n.overlay[data-v-72ff0d15] {\n  position: absolute;\n  width: 200px;\n  height: 200px;\n  padding: 10px 10px;\n}\n.img-thumb:hover .overlay[data-v-72ff0d15],\n.img-thumb-error:hover .overlay[data-v-72ff0d15] {\n  display: block;\n  background: #1d2124;\n  opacity: 0.5;\n}\n.img-thumb-button[data-v-72ff0d15] {\n  opacity: 0;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n  text-align: center;\n}\n.img-thumb:hover .img-thumb-button[data-v-72ff0d15],\n.img-thumb-error:hover .img-thumb-button[data-v-72ff0d15] {\n  opacity: 1;\n}\n.modal-dialog[data-v-72ff0d15] {\n  margin: auto;\n  display: block;\n  width: 80%;\n  max-width: 700px;\n  padding: 70px 0;\n}\n.close[data-v-72ff0d15] {\n  position: absolute;\n  top: 80%;\n  right: 100px;\n  color: #f1f1f1;\n  font-size: 70px;\n  font-weight: bold;\n  -webkit-transition: 0.3s;\n  transition: 0.3s;\n}\n.close[data-v-72ff0d15]:hover,\n.close[data-v-72ff0d15]:focus {\n  color: #bbb;\n  text-decoration: none;\n  cursor: pointer;\n}\n.uploading[data-v-72ff0d15] {\n  position: absolute;\n  width: 200px;\n  height: 200px;\n  padding: 10px 10px;\n}\n", ""]);
 
 // exports
 
