@@ -37,10 +37,10 @@
                     <ul class="navbar-nav mr-auto">
                         @auth
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('home') }}">{{ __('Home') }}</a>
+                                <router-link to="/home" class="nav-link">Home</router-link>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('gallery') }}">{{ __('Gallery') }}</a>
+                                <router-link to="/gallery" class="nav-link">Gallery</router-link>
                             </li>
                         @endauth
                     </ul>
@@ -81,6 +81,7 @@
 
         <main class="py-4">
             @yield('content')
+            <router-view></router-view>
         </main>
     </div>
 </body>
