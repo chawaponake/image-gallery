@@ -71,6 +71,11 @@
                 composition : [],
             }
         },
+        computed : {
+          listComposition () {
+              return this.composition.filter()
+          }
+        },
         created(){
             this.fetch();
         },methods: {
