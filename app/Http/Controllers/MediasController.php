@@ -156,7 +156,7 @@ class MediasController extends Controller
         $media->delete();
 
         return response()->json([
-            'msg' => 'Successfully',
+            'msg' => 'Delete Successfully',
         ]);
     }
 }

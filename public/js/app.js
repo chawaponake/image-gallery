@@ -47808,46 +47808,8 @@ module.exports = function listToStyles (parentId, list) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__GalleryComponent__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__GalleryComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__GalleryComponent__);
 //
 //
 //
@@ -47885,6 +47847,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
@@ -47892,9 +47856,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             medias: []
         };
     },
+
+    components: {
+        GalleryListComponent: __WEBPACK_IMPORTED_MODULE_0__GalleryComponent___default.a
+    },
+
     created: function created() {
         this.fetchData();
     },
+
 
     methods: {
         ondragover: function ondragover(e) {
@@ -47933,25 +47903,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 };
 
                 this.medias.push(fileInfo);
+                if (fileInfo.isImage && !fileInfo.isOverMaxSize) {
+                    var formData = new FormData();
+                    formData.append('files[]', file);
 
-                var formData = new FormData();
-                formData.append('files[]', file);
-
-                axios.post('media-upload', formData, { onUploadProgress: function onUploadProgress(progressEvent) {
-                        fileInfo.progessPercentage = parseInt(Math.round(progressEvent.loaded / progressEvent.total * 100));
-                    }
-                }).then(function (response) {
-                    fileInfo.id = response.data.data.id;
-                    fileInfo.name = response.data.data.name;
-                    fileInfo.media = response.data.data.media;
-                    fileInfo.isImage = response.data.data.isImage;
-                    fileInfo.isOverMaxSize = response.data.data.isOverMaxSize;
-                    fileInfo.isUpload = response.data.data.isUpload;
-                    fileInfo.progessPercentage = response.data.data.progessPercentage;
-                });
+                    axios.post('media-upload', formData, { onUploadProgress: function onUploadProgress(progressEvent) {
+                            fileInfo.progessPercentage = parseInt(Math.round(progressEvent.loaded / progressEvent.total * 100));
+                        }
+                    }).then(function (response) {
+                        fileInfo.id = response.data.data.id;
+                        fileInfo.name = response.data.data.name;
+                        fileInfo.media = response.data.data.media;
+                        fileInfo.isImage = response.data.data.isImage;
+                        fileInfo.isOverMaxSize = response.data.data.isOverMaxSize;
+                        fileInfo.isUpload = response.data.data.isUpload;
+                        fileInfo.progessPercentage = response.data.data.progessPercentage;
+                    });
+                }
             }.bind(this));
 
-            this.$refs.files = "";
+            this.$refs.files.value = '';
         },
         fetchData: function fetchData() {
             var _this = this;
@@ -47960,16 +47931,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.medias = response.data.data;
             });
         },
-        showPopup: function showPopup(url) {
-            $('#myModal').modal('show');
-            $('#img-popup').attr('src', url);
-        },
-        deleteMedia: function deleteMedia(id) {
-            var _this2 = this;
-
-            axios.delete('media-upload/' + id).then(function (response) {
-                _this2.fetchData();
-            });
+        deleteMedia: function deleteMedia(id, index) {
+            this.medias.splice(index, 1);
+            if (id != '') {
+                axios.delete('media-upload/' + id).then(function (response) {
+                    console.log(response.data.msg);
+                });
+            }
         }
 
     }
@@ -47991,181 +47959,56 @@ var render = function() {
             _vm._v("Gallery")
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _c("div", { staticClass: "row justify-content-center" }, [
-              _c(
-                "div",
-                {
-                  staticClass: "upload text-center",
-                  class: { "upload-dragover": _vm.isDragover },
-                  on: {
-                    dragover: _vm.ondragover,
-                    dragleave: _vm.ondragleave,
-                    drop: _vm.ondrop,
-                    click: _vm.onclick
-                  }
-                },
-                [
-                  _c("i", {
-                    staticClass: "fas fa-cloud-upload-alt fa-5x text-secondary"
-                  }),
-                  _vm._v(" "),
-                  _c("p", { staticClass: "text-secondary" }, [
-                    _vm._v("Drop files here or click to choose files...")
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "wrapper" }, [
-                    _c("input", {
-                      ref: "files",
-                      attrs: {
-                        type: "file",
-                        name: "files",
-                        id: "files",
-                        multiple: ""
-                      },
-                      on: { change: _vm.onchange }
-                    })
-                  ])
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "row align-content-center text-center gallery" },
-              _vm._l(_vm.medias, function(media) {
-                return _c("div", { staticClass: "col-md-4" }, [
-                  !media.isImage
-                    ? _c("div", { staticClass: "img-thumb-error" }, [
-                        _c("div", { staticClass: "overlay" }),
-                        _vm._v(" "),
-                        _c("i", {
-                          staticClass:
-                            "fas fa-exclamation-triangle text-danger fa-7x pt-4"
-                        }),
-                        _vm._v(" "),
-                        _c(
-                          "p",
-                          { staticClass: "text-danger font-weight-bold" },
-                          [
-                            _vm._v(
-                              "File type not supported. - " + _vm._s(media.name)
-                            )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "img-thumb-button" }, [
-                          _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-danger",
-                              attrs: { type: "button" },
-                              on: {
-                                click: function($event) {
-                                  _vm.deleteMedia(media.id)
-                                }
-                              }
-                            },
-                            [_c("i", { staticClass: "fas fa-trash-alt" })]
-                          )
-                        ])
-                      ])
-                    : _c("div", [
-                        media.isOverMaxSize
-                          ? _c("div", { staticClass: "img-thumb-error" }, [
-                              _c("div", { staticClass: "overlay" }),
-                              _vm._v(" "),
-                              _c("i", {
-                                staticClass:
-                                  "fas fa-exclamation-triangle text-danger fa-7x pt-4"
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "p",
-                                { staticClass: "text-danger font-weight-bold" },
-                                [
-                                  _vm._v(
-                                    "File size exceeded. - " +
-                                      _vm._s(media.name)
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "img-thumb-button" }, [
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass: "btn btn-danger",
-                                    attrs: { type: "button" },
-                                    on: {
-                                      click: function($event) {
-                                        _vm.deleteMedia(media.id)
-                                      }
-                                    }
-                                  },
-                                  [_c("i", { staticClass: "fas fa-trash-alt" })]
-                                )
-                              ])
-                            ])
-                          : _c("div", { staticClass: "img-thumb" }, [
-                              _c("div", { staticClass: "overlay" }),
-                              _vm._v(" "),
-                              _c(
-                                "div",
-                                { class: { uploading: media.isUpload } },
-                                [
-                                  media.isUpload
-                                    ? _c("img", {
-                                        attrs: { src: "/image/loading.gif" }
-                                      })
-                                    : _vm._e(),
-                                  _vm._v(
-                                    "\n                                        " +
-                                      _vm._s(media.progessPercentage) +
-                                      "\n                                    "
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              !media.isUpload
-                                ? _c("img", { attrs: { src: media.media } })
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "img-thumb-button" }, [
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass: "btn btn-primary",
-                                    attrs: { type: "button" },
-                                    on: {
-                                      click: function($event) {
-                                        _vm.showPopup(media.media)
-                                      }
-                                    }
-                                  },
-                                  [_c("i", { staticClass: "fas fa-search" })]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass: "btn btn-danger",
-                                    attrs: { type: "button" },
-                                    on: {
-                                      click: function($event) {
-                                        _vm.deleteMedia(media.id)
-                                      }
-                                    }
-                                  },
-                                  [_c("i", { staticClass: "fas fa-trash-alt" })]
-                                )
-                              ])
-                            ])
-                      ])
-                ])
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c("div", { staticClass: "row justify-content-center" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "upload text-center",
+                    class: { "upload-dragover": _vm.isDragover },
+                    on: {
+                      dragover: _vm.ondragover,
+                      dragleave: _vm.ondragleave,
+                      drop: _vm.ondrop,
+                      click: _vm.onclick
+                    }
+                  },
+                  [
+                    _c("i", {
+                      staticClass:
+                        "fas fa-cloud-upload-alt fa-5x text-secondary"
+                    }),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "text-secondary" }, [
+                      _vm._v("Drop files here or click to choose files...")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "wrapper" }, [
+                      _c("input", {
+                        ref: "files",
+                        attrs: {
+                          type: "file",
+                          name: "files",
+                          id: "files",
+                          multiple: ""
+                        },
+                        on: { change: _vm.onchange }
+                      })
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("gallery-list-component", {
+                attrs: { medias: _vm.medias },
+                on: { "delete-media": _vm.deleteMedia }
               })
-            )
-          ])
+            ],
+            1
+          )
         ])
       ])
     ]),
@@ -48233,7 +48076,7 @@ exports = module.exports = __webpack_require__(45)(false);
 
 
 // module
-exports.push([module.i, "\n.upload[data-v-72ff0d15] {\n  margin-left: 15px;\n  margin-right: 15px;\n  padding: 50px 45px;\n  width: 100%;\n  border: 2px dashed #cecece;\n}\n.upload[data-v-72ff0d15]:hover {\n  cursor: pointer;\n}\n.upload-dragover[data-v-72ff0d15] {\n  border: 2px dashed #4e555b;\n}\n.gallery[data-v-72ff0d15] {\n  padding-top: 20px;\n}\n.wrapper[data-v-72ff0d15] {\n  display: none;\n}\n.img-thumb[data-v-72ff0d15] {\n  width: 200px;\n  height: 200px;\n}\n.img-thumb img[data-v-72ff0d15] {\n    width: 100%;\n    height: auto;\n}\n.img-thumb-error[data-v-72ff0d15] {\n  width: 200px;\n  height: 200px;\n}\n.overlay[data-v-72ff0d15] {\n  position: absolute;\n  width: 200px;\n  height: 200px;\n  padding: 10px 10px;\n}\n.img-thumb:hover .overlay[data-v-72ff0d15],\n.img-thumb-error:hover .overlay[data-v-72ff0d15] {\n  display: block;\n  background: #1d2124;\n  opacity: 0.5;\n}\n.img-thumb-button[data-v-72ff0d15] {\n  opacity: 0;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n  text-align: center;\n}\n.img-thumb:hover .img-thumb-button[data-v-72ff0d15],\n.img-thumb-error:hover .img-thumb-button[data-v-72ff0d15] {\n  opacity: 1;\n}\n.modal-dialog[data-v-72ff0d15] {\n  margin: auto;\n  display: block;\n  width: 80%;\n  max-width: 700px;\n  padding: 70px 0;\n}\n.close[data-v-72ff0d15] {\n  position: absolute;\n  top: 80%;\n  right: 100px;\n  color: #f1f1f1;\n  font-size: 70px;\n  font-weight: bold;\n  -webkit-transition: 0.3s;\n  transition: 0.3s;\n}\n.close[data-v-72ff0d15]:hover,\n.close[data-v-72ff0d15]:focus {\n  color: #bbb;\n  text-decoration: none;\n  cursor: pointer;\n}\n.uploading[data-v-72ff0d15] {\n  position: absolute;\n  width: 200px;\n  height: 200px;\n  padding: 10px 10px;\n}\n", ""]);
+exports.push([module.i, "\n.upload[data-v-72ff0d15] {\n  margin-left: 15px;\n  margin-right: 15px;\n  padding: 50px 45px;\n  width: 100%;\n  border: 2px dashed #cecece;\n}\n.upload[data-v-72ff0d15]:hover {\n  cursor: pointer;\n}\n.upload-dragover[data-v-72ff0d15] {\n  border: 2px dashed #4e555b;\n}\n.wrapper[data-v-72ff0d15] {\n  display: none;\n}\n.modal-dialog[data-v-72ff0d15] {\n  margin: auto;\n  display: block;\n  width: 80%;\n  max-width: 700px;\n  padding: 70px 0;\n}\n.close[data-v-72ff0d15] {\n  position: absolute;\n  top: 80%;\n  right: 100px;\n  color: #f1f1f1;\n  font-size: 70px;\n  font-weight: bold;\n  -webkit-transition: 0.3s;\n  transition: 0.3s;\n}\n.close[data-v-72ff0d15]:hover,\n.close[data-v-72ff0d15]:focus {\n  color: #bbb;\n  text-decoration: none;\n  cursor: pointer;\n}\n", ""]);
 
 // exports
 
@@ -48324,7 +48167,7 @@ exports = module.exports = __webpack_require__(45)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -48407,6 +48250,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             no_of_files: 0,
             composition: []
         };
+    },
+    computed: {
+        listComposition: function listComposition() {
+            return this.composition.filter();
+        }
     },
     created: function created() {
         this.fetch();
@@ -48564,6 +48412,305 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-c6d51d60", module.exports)
   }
 }
+
+/***/ }),
+/* 64 */,
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(70)
+}
+var normalizeComponent = __webpack_require__(40)
+/* script */
+var __vue_script__ = __webpack_require__(68)
+/* template */
+var __vue_template__ = __webpack_require__(69)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-11a722fc"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/GalleryComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-11a722fc", Component.options)
+  } else {
+    hotAPI.reload("data-v-11a722fc", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 66 */,
+/* 67 */,
+/* 68 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        medias: {
+            type: Array,
+            required: true
+        }
+    },
+    methods: {
+        showPopup: function showPopup(url) {
+            $('#myModal').modal('show');
+            $('#img-popup').attr('src', url);
+        },
+        deleteMedia: function deleteMedia(id, uuid) {
+            this.$emit('delete-media', id, uuid);
+        }
+    }
+});
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "row align-content-center text-center gallery" },
+    _vm._l(_vm.medias, function(media, index) {
+      return _c("div", { staticClass: "col-md-4" }, [
+        !media.isImage
+          ? _c("div", { staticClass: "img-thumb-error" }, [
+              _c("div", { staticClass: "overlay" }),
+              _vm._v(" "),
+              _c("i", {
+                staticClass:
+                  "fas fa-exclamation-triangle text-danger fa-7x pt-4"
+              }),
+              _vm._v(" "),
+              _c("p", { staticClass: "text-danger font-weight-bold" }, [
+                _vm._v("File type not supported. - " + _vm._s(media.name))
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "img-thumb-button" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-danger",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        _vm.deleteMedia(media.id, index)
+                      }
+                    }
+                  },
+                  [_c("i", { staticClass: "fas fa-trash-alt" })]
+                )
+              ])
+            ])
+          : _c("div", [
+              media.isOverMaxSize
+                ? _c("div", { staticClass: "img-thumb-error" }, [
+                    _c("div", { staticClass: "overlay" }),
+                    _vm._v(" "),
+                    _c("i", {
+                      staticClass:
+                        "fas fa-exclamation-triangle text-danger fa-7x pt-4"
+                    }),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "text-danger font-weight-bold" }, [
+                      _vm._v("File size exceeded. - " + _vm._s(media.name))
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "img-thumb-button" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              _vm.deleteMedia(media.id, index)
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fas fa-trash-alt" })]
+                      )
+                    ])
+                  ])
+                : _c("div", { staticClass: "img-thumb" }, [
+                    _c("div", { staticClass: "overlay" }),
+                    _vm._v(" "),
+                    _c("div", { class: { uploading: media.isUpload } }, [
+                      media.isUpload
+                        ? _c("img", { attrs: { src: "/image/loading.gif" } })
+                        : _vm._e(),
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(media.progessPercentage) +
+                          "\n                "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    !media.isUpload
+                      ? _c("img", { attrs: { src: media.media } })
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "img-thumb-button" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              _vm.showPopup(media.media)
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fas fa-search" })]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              _vm.deleteMedia(media.id, index)
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fas fa-trash-alt" })]
+                      )
+                    ])
+                  ])
+            ])
+      ])
+    })
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-11a722fc", module.exports)
+  }
+}
+
+/***/ }),
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(71);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(51)("6746a30a", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-11a722fc\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./GalleryComponent.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-11a722fc\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./GalleryComponent.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(45)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.gallery[data-v-11a722fc] {\n  padding-top: 20px;\n}\n.img-thumb[data-v-11a722fc] {\n  width: 200px;\n  height: 200px;\n}\n.img-thumb img[data-v-11a722fc] {\n    width: 100%;\n    height: auto;\n}\n.img-thumb-error[data-v-11a722fc] {\n  width: 200px;\n  height: 200px;\n}\n.overlay[data-v-11a722fc] {\n  position: absolute;\n  width: 200px;\n  height: 200px;\n  padding: 10px 10px;\n}\n.img-thumb:hover .overlay[data-v-11a722fc],\n.img-thumb-error:hover .overlay[data-v-11a722fc] {\n  display: block;\n  background: #1d2124;\n  opacity: 0.5;\n}\n.img-thumb-button[data-v-11a722fc] {\n  opacity: 0;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n  text-align: center;\n}\n.img-thumb:hover .img-thumb-button[data-v-11a722fc],\n.img-thumb-error:hover .img-thumb-button[data-v-11a722fc] {\n  opacity: 1;\n}\n.uploading[data-v-11a722fc] {\n  position: absolute;\n  width: 200px;\n  height: 200px;\n  padding: 10px 10px;\n}\n", ""]);
+
+// exports
+
 
 /***/ })
 /******/ ]);
